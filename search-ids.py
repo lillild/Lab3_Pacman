@@ -129,6 +129,7 @@ def iterativeDeepeningSearch(problem):
     while True:
         result = depth_limited_dfs(depth)
         if result is not None:
+            print("IDS Actions: ", path)
             return result
         depth += 1
 
