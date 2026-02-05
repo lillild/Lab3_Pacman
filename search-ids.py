@@ -114,6 +114,7 @@ def iterativeDeepeningSearch(problem):
         while not stack.isEmpty():
             state, path, depth = stack.pop() #LIFO
             if problem.isGoalState(state):
+                print("IDS Actions: ", path)
                 return path
             if depth == limit:
                 continue #don't look into children if limit reached (pop next node from stack instead)
@@ -129,7 +130,6 @@ def iterativeDeepeningSearch(problem):
     while True:
         result = depth_limited_dfs(depth)
         if result is not None:
-            print("IDS Actions: ", path)
             return result
         depth += 1
 
