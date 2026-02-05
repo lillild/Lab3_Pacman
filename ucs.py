@@ -1,17 +1,5 @@
 def uniformCostSearch(problem: SearchProblem) -> List[Directions]:
-    """
-    Uniform Cost Search (UCS)
-
-    Frontier:
-    - Implemented using a priority queue (util.PriorityQueue)
-    - Nodes are ordered by total path cost g(n)
-
-    Graph Search:
-    - Uses a dictionary (best_cost) to store the lowest cost found so far
-      for each state to avoid revisiting more expensive paths
-    """
-
-
+    
     frontier = util.PriorityQueue()
 
     start = problem.getStartState()
@@ -31,6 +19,9 @@ def uniformCostSearch(problem: SearchProblem) -> List[Directions]:
 
         # Goal test
         if problem.isGoalState(state):
+            print("UCS Solution Path:")
+            print(actions)
+            print("Total Cost:", cost_so_far)
             return actions
 
         for successor, action, stepCost in problem.getSuccessors(state):
@@ -50,4 +41,5 @@ def uniformCostSearch(problem: SearchProblem) -> List[Directions]:
                 )
 
     # If no solution is found, return an empty path
+    print("UCS: No solution found")
     return []
