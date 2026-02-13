@@ -136,6 +136,39 @@ class MinimaxAgent(MultiAgentSearchAgent):
         Returns whether or not the game state is a losing state
         """
         "*** YOUR CODE HERE ***"
+        
+        numAgents = gameState.getNumAgents()
+
+        def value(state, agentIndex, currentDepth): #terminal state or max depth reached
+            if state.isWin() or state.isLose() or currentDepth==self.depth:
+                return self.evaluationFunction(state)
+            if agentIndex==0: #it's pacman
+                return max_value(state, agentIndex, currentDepth)
+            else: #ghosts
+                return min_value(state, agentIndex, currentDepth)
+
+
+        def max_value(state, agentIndex, currentDepth):
+            v = -float('inf')
+            #loop thru pacman's available actions
+            for action in state.getLegalActions(0):
+                successor = state.generateSuccessor(0, action)
+                v = max(v, value(successor, 1, currentDepth))
+            return v
+
+        def min_value(state, agentIndex, currentDepth):
+            v = float('inf')
+            #loop thru ghosts' available actions
+            for action in state.getLegalActions(agentIndex):
+                successor = state.generateSuccessor(agentIndex, action)
+
+                #who moves next?
+                if agentIndex == (numAgents-1): #if the last ghost, pacman is next agent so depth increases
+                    v = min(v, value(successor, 0, currentDepth+1))
+                else:#there are more ghosts
+                    v = min(v, value(successor, agentIndex+1, currentDepth))
+            return v
+
 
         bestAction = None
         maxValueAction = -float('inf')
@@ -149,37 +182,6 @@ class MinimaxAgent(MultiAgentSearchAgent):
                 maxValueAction = currentValue
                 bestAction = action
         return bestAction
-        
-
-        def value(state, agentIndex, currentDepth): #terminal state or max depth reached
-            if state.isWin() or state.isLose() or currentDepth==self.depth:
-                return self.evaluationFunction(state)
-            if agentIndex==0:
-                return max_value(state, agentIndex, currentDepth)
-            else:
-                return min_value(state, agentIndex, currentDepth)
-        
-        def max_value(state, agentIndex, currentDepth):
-            v = -float('inf')
-            #loop thru pacman's available actions
-            for action in state.getLegalActions(agentIndex):
-                successor = state.generateSuccessor(agentIndex, action)
-                v = max(v, value(successor, 1, currentDepth))
-            return v
-
-        def min_value(state, agentIndex, currentDepth):
-            v = float('inf')
-            numAgents = state.getNumAgents()
-            #loop thru ghosts' available actions
-            for action in state.getLegalActions(agentIndex):
-                successor = state.generateSuccessor(agentIndex, action)
-
-                #who moves next?
-                if agentIndex == (numAgents-1): #if the last ghost, pacman is next agent so depth increases
-                    v = min(v, value(successor, 0, currentDepth+1))
-                else:#there are more ghosts
-                    v = min(v, value(successor, agentIndex+1, currentDepth))
-            return v
 
         util.raiseNotDefined()
 
